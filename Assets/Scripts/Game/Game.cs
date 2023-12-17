@@ -10,11 +10,11 @@ public class Game : IGame
     private string _currentGameMode;
     private IBoard _board;
 
-    public Game(IBoard board)
+    public Game()
     {
         _currentSequence = "";
         _currentGameMode = "";
-        _board = board;
+        _board = new Board();
     }
 
     public void StartGame(string gameMode)

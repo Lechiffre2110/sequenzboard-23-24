@@ -6,7 +6,7 @@ public class Board : IBoard
     public Board()
     {
         _bluetoothConnector = new BluetoothConnector();
-        ConnectToBoard();
+        _bluetoothConnector.StartBluetoothConnection();
     }
     public void ConnectToBoard()
     {
@@ -17,7 +17,7 @@ public class Board : IBoard
     {
         try
         {
-            bluetoothConnector.WriteData(sequence);
+            _bluetoothConnector.WriteData(sequence);
         }
         catch (BoardNotConnectedException ex)
         {
@@ -29,7 +29,7 @@ public class Board : IBoard
     {
         try
         {
-            return bluetoothConnector.ReadData();
+            return _bluetoothConnector.ReadData();
         }
         catch (BoardNotConnectedException ex)
         {
@@ -40,6 +40,6 @@ public class Board : IBoard
 
     public void DisconnectFromBoard()
     {
-        bluetoothConnector.StopBluetoothConnection();
+        _bluetoothConnector.StopBluetoothConnection();
     }
 }

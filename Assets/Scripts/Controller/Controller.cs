@@ -4,14 +4,11 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
-    private IBoard _board;
     private IGame _game;
 
     void Start()
     {
-        _board = new Board();
-        
-        _game = new Game(_board);
+        _game = new Game();
         _game.StartGame("normal");
     }
 
