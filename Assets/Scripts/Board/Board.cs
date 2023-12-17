@@ -8,25 +8,26 @@ public class Board : IBoard
 
     public void SendMessageToBoard(string sequence)
     {
-        if (bluetoothConnector.IsConnected())
+        try
         {
             bluetoothConnector.WriteData(sequence);
         }
-        else
+        catch (BoardNotConnectedException ex)
         {
-            throw new BoardConnectionFailedException("Error sending message: Board is not connected");
+            Debug.Log(ex.Message);
         }
     }
 
     public string ReadMessageFromBoard()
     {
-        if (bluetoothConnector.IsConnected())
+        try
         {
             return bluetoothConnector.ReadData();
         }
-        else
+        catch (BoardNotConnectedException ex)
         {
-            throw new BoardConnectionFailedException("Error reading message: Board is not connected");
+            Debug.Log(ex.Message);
+            return "";
         }
     }
 
