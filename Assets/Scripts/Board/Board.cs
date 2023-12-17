@@ -6,8 +6,6 @@ public class Board : IBoard
     public Board()
     {
         _bluetoothConnector = new BluetoothConnector();
-        _bluetoothConnector.StartBluetoothConnection();
-        _bluetoothConnector.WriteData("Hello");
     }
     public void ConnectToBoard()
     {
@@ -18,6 +16,7 @@ public class Board : IBoard
     {
         try
         {
+            Debug.Log("Sending message to board: " + sequence);
             _bluetoothConnector.WriteData(sequence);
         }
         catch (BoardNotConnectedException ex)

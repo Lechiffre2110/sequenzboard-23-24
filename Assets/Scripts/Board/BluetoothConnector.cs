@@ -5,10 +5,20 @@ using UnityEngine;
 public class BluetoothConnector
 {
     private SerialPort _serialPort;
+    private string _arduinoPort;
+    private bool _connectionStatus = false;
     
     public BluetoothConnector()
     {
         _serialPort = null;
+        _arduinoPort = GetArduinoPort();
+        _connectionStatus = StartBluetoothConnection();
+    }
+
+    public string GetConnectionStatus()
+    {
+        Debug.Log("Is connected: " + _connectionStatus);
+        return _connectionStatus;
     }
 
     public string GetArduinoPort()
@@ -31,32 +41,21 @@ public class BluetoothConnector
         return arduinoPort;
     }
 
-    public string StartBluetoothConnection()
+    public bool StartBluetoothConnection()
     {
-        string portName = GetArduinoPort();
-        using (_serialPort = new SerialPort(portName, 9600))
+        _serialPort = new SerialPort(_arduinoPort, 9600)
+        _serialPort.Open();
+        _serialPort.ReadTimeout = 100;
+        _serialPort.WriteTimeout = 100;
+        if (_serialPort.IsOpen)
         {
-            _serialPort.Open();
-            _serialPort.ReadTimeout = 100;
-            _serialPort.WriteTimeout = 100;
-
-            if (_serialPort.IsOpen)
-            {
-                Debug.Log("Connected to board");
-                return "Connected";
-            }
-            else
-            {
-                throw new BoardConnectionFailedException("Failed to connect to board");
-            }
+            Debug.Log("Connected to board. Port name: " + _arduinoPort + "");
+            return true;            
         }
-    }
-
-    public bool Handshake()
-    {
-        _serialPort.WriteLine("ping\n");
-        string response = _serialPort.ReadLine();
-        return response == "pong";
+        else
+        {
+            throw new BoardConnectionFailedException("Failed to connect to board");            
+        }
     }
 
     public string ReadData()
@@ -79,12 +78,14 @@ public class BluetoothConnector
             _serialPort.Open();
         }
         _serialPort.WriteLine(data);
+        Debug.Log("Sent data to board: " + data);
     }
 
     public void StopBluetoothConnection()
     {
         if (_serialPort != null && _serialPort.IsOpen)
         {
+            Debug.Log("Disconnected from board.");
             _serialPort.Close();
         }
     }
