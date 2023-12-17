@@ -79,6 +79,8 @@ public class BluetoothConnector
 
     public bool IsConnected()
     {
+        Debug.Log("Serialport" + _serialPort);
+        Debug.Log("Serialport open" + _serialPort.IsOpen);
         return _serialPort != null && _serialPort.IsOpen;
     }
 }
