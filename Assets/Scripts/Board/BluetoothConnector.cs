@@ -75,7 +75,7 @@ public class BluetoothConnector
             _serialPort.WriteLine(data);
         } else
         {
-            throw new BoardNotConnectedException("Board is not connected");
+            throw new BoardNotConnectedException("SerialPort: " + _serialPort + " SerialPort is open:  " + _serialPort.IsOpen);
         }
     }
 
