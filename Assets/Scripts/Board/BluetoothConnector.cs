@@ -78,10 +78,7 @@ public class BluetoothConnector
         {
             _serialPort.Open();
         }
-        if (_serialPort != null && _serialPort.IsOpen) 
-        {
-            _serialPort.WriteLine(data);
-        }
+        _serialPort.WriteLine(data)
     }
 
     public void StopBluetoothConnection()
