@@ -11,14 +11,4 @@ public class Controller : MonoBehaviour
         _game = new Game();
         _game.StartGame("normal");
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    void OnApplicationQuit()
-    {
-        _board.DisconnectFromBoard();
-    }
 }

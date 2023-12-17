@@ -70,12 +70,17 @@ public class BluetoothConnector
 
     public void WriteData(string data)
     {
-        if (_serialPort != null && _serialPort.IsOpen)
+        if (_serialPort == null)
+        {
+            throw new BoardNotConnectedException("Board is not connected");
+        }
+        if (!_serialPort.IsOpen)
+        {
+            _serialPort.Open();
+        }
+        if (_serialPort != null && _serialPort.IsOpen) 
         {
             _serialPort.WriteLine(data);
-        } else
-        {
-            throw new BoardNotConnectedException("SerialPort: " + _serialPort + " SerialPort is open:  " + _serialPort.IsOpen);
         }
     }
 

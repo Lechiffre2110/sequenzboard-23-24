@@ -7,6 +7,7 @@ public class Board : IBoard
     {
         _bluetoothConnector = new BluetoothConnector();
         _bluetoothConnector.StartBluetoothConnection();
+        _bluetoothConnector.WriteData("Hello");
     }
     public void ConnectToBoard()
     {
