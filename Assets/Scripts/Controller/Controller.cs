@@ -10,7 +10,6 @@ public class Controller : MonoBehaviour
     void Start()
     {
         _board = new Board();
-        _board.ConnectToBoard();
         
         _game = new Game(_board);
         _game.StartGame("normal");

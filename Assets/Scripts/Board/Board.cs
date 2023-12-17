@@ -1,9 +1,16 @@
+using UnityEngine;
 public class Board : IBoard 
 {
-    private BluetoothConnector bluetoothConnector = new BluetoothConnector();
+    private BluetoothConnector _bluetoothConnector;
+
+    public Board()
+    {
+        _bluetoothConnector = new BluetoothConnector();
+        ConnectToBoard();
+    }
     public void ConnectToBoard()
     {
-        bluetoothConnector.StartBluetoothConnection();
+        _bluetoothConnector.StartBluetoothConnection();
     }
 
     public void SendMessageToBoard(string sequence)
