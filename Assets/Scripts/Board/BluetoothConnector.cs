@@ -43,7 +43,7 @@ public class BluetoothConnector
 
     public bool StartBluetoothConnection()
     {
-        _serialPort = new SerialPort(_arduinoPort, 9600)
+        _serialPort = new SerialPort(_arduinoPort, 9600);
         _serialPort.Open();
         _serialPort.ReadTimeout = 100;
         _serialPort.WriteTimeout = 100;
