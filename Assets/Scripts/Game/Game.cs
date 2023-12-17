@@ -8,13 +8,20 @@ public class Game : IGame
 {
     private string _currentSequence;
     private string _currentGameMode;
+    private IBoard _board;
 
-    public void StartGame(string gameMode, IBoard board)
+    public Game(IBoard board)
+    {
+        _currentSequence = "";
+        _currentGameMode = "";
+        _board = board;
+    }
+
+    public void StartGame(string gameMode)
     {
         _currentGameMode = gameMode;
         _currentSequence = GenerateSequence(10);
-        Debug.Log(_currentSequence);
-        board.SendMessageToBoard(_currentSequence);
+        _board.SendMessageToBoard(_currentSequence);
     }
 
     public string GetCurrentSequence()

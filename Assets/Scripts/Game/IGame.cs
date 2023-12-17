@@ -1,6 +1,6 @@
 public interface IGame 
 {
-    void StartGame(string gameMode, IBoard board); //TODO: revert back after testing
+    void StartGame(string gameMode);
 
     void StartGameFromSequence(string sequence);
     void EndGame();

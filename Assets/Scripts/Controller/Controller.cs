@@ -10,10 +10,10 @@ public class Controller : MonoBehaviour
     void Start()
     {
         _board = new Board();
-        _game = new Game();
+        _game = new Game(_board);
 
         _board.ConnectToBoard();
-        _game.StartGame("normal", _board);
+        _game.StartGame("normal");
     }
 
     // Update is called once per frame

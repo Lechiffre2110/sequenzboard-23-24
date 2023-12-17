@@ -14,7 +14,7 @@ public class Board : IBoard
         }
         else
         {
-            throw new BoardConnectionFailedException("Board is not connected");
+            throw new BoardConnectionFailedException("Error sending message: Board is not connected");
         }
     }
 
@@ -26,7 +26,7 @@ public class Board : IBoard
         }
         else
         {
-            throw new BoardConnectionFailedException("Board is not connected");
+            throw new BoardConnectionFailedException("Error reading message: Board is not connected");
         }
     }
 
