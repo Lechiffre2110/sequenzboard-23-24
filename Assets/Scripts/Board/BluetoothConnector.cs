@@ -15,7 +15,7 @@ public class BluetoothConnector
         _connectionStatus = StartBluetoothConnection();
     }
 
-    public string GetConnectionStatus()
+    public bool GetConnectionStatus()
     {
         Debug.Log("Is connected: " + _connectionStatus);
         return _connectionStatus;
