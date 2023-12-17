@@ -5,6 +5,7 @@ using UnityEngine;
 public class BluetoothConnector
 {
     private SerialPort _serialPort;
+    
     public BluetoothConnector()
     {
         _serialPort = null;
@@ -18,6 +19,7 @@ public class BluetoothConnector
         {
             if (availablePorts[i].Contains("HC-05"))
             {
+                Debug.Log("Arduino port: " + availablePorts[i]);
                 arduinoPort = availablePorts[i];
                 break;
             }
@@ -40,6 +42,7 @@ public class BluetoothConnector
 
             if (_serialPort.IsOpen)
             {
+                Debug.Log("Connected to board");
                 return "Connected";
             }
             else
@@ -47,6 +50,13 @@ public class BluetoothConnector
                 throw new BoardConnectionFailedException("Failed to connect to board");
             }
         }
+    }
+
+    public bool Handshake()
+    {
+        _serialPort.WriteLine("ping\n");
+        string response = _serialPort.ReadLine();
+        return response == "pong";
     }
 
     public string ReadData()
