@@ -2,17 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IBoard : MonoBehaviour
+public interface IBoard 
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void ConnectToBoard();
+    void DisconnectFromBoard();
+    void SendMessageToBoard(string message);
+    string ReadMessageFromBoard();
 }
