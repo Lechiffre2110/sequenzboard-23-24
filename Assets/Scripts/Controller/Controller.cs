@@ -11,4 +11,14 @@ public class Controller : MonoBehaviour
         _game = new Game();
         _game.StartGame("normal");
     }
+
+    void FixedUpdate()
+    {
+        _game.StartGame("normal");
+    }
+
+    void OnApplicationQuit()
+    {
+        _game.QuitGame();
+    }
 }

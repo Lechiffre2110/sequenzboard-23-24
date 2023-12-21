@@ -54,11 +54,6 @@ public class Game : IGame
         throw new System.NotImplementedException();
     }
 
-    public void QuitGame()
-    {
-        throw new System.NotImplementedException();
-    }
-
     private string GenerateSequence(int sequenceLength)
     {
         StringBuilder sequenceBuilder = new StringBuilder();
@@ -83,5 +78,10 @@ public class Game : IGame
         string sequence = sequenceBuilder.ToString();
         Debug.Log(sequence);
         return sequence;
+    }
+
+    public void QuitGame()
+    {
+        _board.DisconnectFromBoard();
     }
 }

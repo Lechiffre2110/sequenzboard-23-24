@@ -75,6 +75,7 @@ public class BluetoothConnector
         }
         if (!_serialPort.IsOpen)
         {
+            Debug.Log("Reconnecting to board...");
             _serialPort.Open();
         }
         _serialPort.WriteLine(data);
