@@ -36,11 +36,14 @@ public class Game : IGame
 
     public void EndGame()
     {
+        // Game end screen with score 
+        // Go back to main menu
         throw new System.NotImplementedException();
     }
 
     public void PauseGame()
     {
+        //pause game and show pause screen with resume and restart buttons
         throw new System.NotImplementedException();
     }
 
