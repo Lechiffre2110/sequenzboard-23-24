@@ -5,6 +5,8 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     private IGame _game;
+    [SerializeField] private UserInterface _userInterface;
+
 
     void Start()
     {
@@ -14,11 +16,17 @@ public class Controller : MonoBehaviour
 
     void FixedUpdate()
     {
-        _game.StartGame("normal");
+        //_game.StartGame("normal");
     }
 
     void OnApplicationQuit()
     {
         _game.QuitGame();
+    }
+
+    public void StartGameWithRandomSequence()
+    {
+        _game.StartGame("normal");
+        _userInterface.PlaySequence(_game.GetCurrentSequence());
     }
 }
