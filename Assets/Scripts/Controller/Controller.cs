@@ -12,11 +12,12 @@ public class Controller : MonoBehaviour
     {
         _game = new Game();
         _game.StartGame("normal");
+        InvokeRepeating("UpdateGameState", 0.0f, 1.0f);
     }
 
-    void FixedUpdate()
+    void UpdateGameState()
     {
-        //_game.StartGame("normal");
+       _game.UpdateGameState();
     }
 
     void OnApplicationQuit()
@@ -29,4 +30,4 @@ public class Controller : MonoBehaviour
         _game.StartGame("normal");
         _userInterface.PlaySequence(_game.GetCurrentSequence());
     }
-}
+} 
