@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Text;
+using System.Linq;
 
 //TODO: remove magic numbers
 public class Game : IGame
@@ -9,6 +10,9 @@ public class Game : IGame
     private string _currentSequence;
     private string _currentGameMode;
     private IBoard _board;
+    private List<char> _inputSequence = new List<char>();
+    public string _previousInput = ""; //TODO: adjust logic
+
 
     public Game()
     {
@@ -32,6 +36,45 @@ public class Game : IGame
     public void StartGameFromSequence(string sequence)
     {
         throw new System.NotImplementedException();
+    }
+
+    public void UpdateGameState() {
+        GetBoardInput();
+        bool inputIsValid = ValidateBoardInput();
+        if (!inputIsValid) {
+            //reset game state and give feedback about incorrectness of user input
+            _inputSequence = new List<char>();
+            _previousInput = "";
+            //display wrong input on game running screen
+            //reset progress on game running screen
+        }
+    }
+
+    public void GetBoardInput()
+    {
+        string input = _board.ReadMessageFromBoard();
+        if (input != "" && input != _previousInput)
+        {
+            _inputSequence.Add(input[0]);
+            _previousInput = input;
+            Debug.Log("Input: " + input);
+        }
+    }
+
+    private bool ValidateBoardInput()
+    {
+        if (_inputSequence.Count == 0)
+        {
+            return true;
+        }
+        for (int i = 0; i < _inputSequence.Count; i++)
+        {
+            if (_inputSequence[i] != _currentSequence[i])
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void EndGame()

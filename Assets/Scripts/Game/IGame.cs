@@ -4,6 +4,8 @@ public interface IGame
 
     void StartGameFromSequence(string sequence);
     void EndGame();
+
+    void UpdateGameState();
     void PauseGame();
     void ResumeGame();
     void RestartGame();
