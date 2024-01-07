@@ -7,6 +7,8 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private GameObject mainMenuScreen;
     [SerializeField] private GameObject gameScreen;
     [SerializeField] private SequenceGameScreen sequenceGameScreen;
+
+    [SerializeField] private RunningGameScreen gameRunningScreen;
     [SerializeField] private GameObject settingsScreen;
     [SerializeField] private GameObject helpScreen;
     private Screen currentScreen;
@@ -36,12 +38,16 @@ public class UserInterface : MonoBehaviour
                 gameScreen.SetActive(false);
                 settingsScreen.SetActive(false);
                 helpScreen.SetActive(false);
+                gameRunningScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
                 break;
             case Screen.Game:
                 mainMenuScreen.SetActive(false);
                 gameScreen.SetActive(true);
                 settingsScreen.SetActive(false);
                 helpScreen.SetActive(false);
+                gameRunningScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
                 break;
             case Screen.Sequence:
                 mainMenuScreen.SetActive(false);
@@ -49,18 +55,31 @@ public class UserInterface : MonoBehaviour
                 settingsScreen.SetActive(false);
                 helpScreen.SetActive(false);
                 sequenceGameScreen.SetActive(true);
+                gameRunningScreen.SetActive(false);
+                break;
+            case Screen.Running:
+                mainMenuScreen.SetActive(false);
+                gameScreen.SetActive(false);
+                settingsScreen.SetActive(false);
+                helpScreen.SetActive(false);
+                gameRunningScreen.SetActive(true);
+                sequenceGameScreen.SetActive(false);
                 break;
             case Screen.Settings:
                 mainMenuScreen.SetActive(false);
                 gameScreen.SetActive(false);
                 settingsScreen.SetActive(true);
                 helpScreen.SetActive(false);
+                gameRunningScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
                 break;
             case Screen.Help:
                 mainMenuScreen.SetActive(false);
                 gameScreen.SetActive(false);
                 settingsScreen.SetActive(false);
                 helpScreen.SetActive(true);
+                gameRunningScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
                 break;
         }
     }
@@ -82,6 +101,11 @@ public class UserInterface : MonoBehaviour
         ChangeScreen(Screen.Game);
     }
 
+    public void DisplayRunningGameScreen() 
+    {
+        ChangeScreen(Screen.Running);
+    }
+
     public void DisplaySettingsScreen() 
     {
         ChangeScreen(Screen.Settings);
@@ -101,6 +125,11 @@ public class UserInterface : MonoBehaviour
     {
         ChangeScreen(Screen.Sequence);
         StartCoroutine(sequenceGameScreen.PlaySequence(sequence));
+    }
+
+    public void UpdateGameState() 
+    {
+        //gameRunningScreen.UpdateGameState();
     }
     
 }
