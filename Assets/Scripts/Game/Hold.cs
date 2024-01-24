@@ -30,4 +30,9 @@ public static class HoldExtensions
     {
         return (Hold)random.Next(0, NumberOfHolds);
     }
+
+    public static string ToHoldString(this Hold hold)
+    {
+        return hold.ToString();
+    }
 }
