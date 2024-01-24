@@ -8,6 +8,8 @@ public class RunningGameScreen : MonoBehaviour
 {
     public GameObject[] sequenceButtons;
     public TMP_Text timerText;
+
+    public TMP_Text currentHoldText;
     private float startTime;
     private int currentHold = 0;
     public GameObject correctFeedbackFrame;
@@ -16,7 +18,6 @@ public class RunningGameScreen : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // Initialize the start time when the game starts
         startTime = Time.time;
         UpdateTimerText();
     }
@@ -26,10 +27,8 @@ public class RunningGameScreen : MonoBehaviour
         gameObject.SetActive(active);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Update the timer text every frame
         UpdateTimerText();
     }
 
@@ -46,7 +45,6 @@ public class RunningGameScreen : MonoBehaviour
 
     public void StartTimer()
     {
-        // Start or restart the timer when needed
         startTime = Time.time;
     }
 
@@ -58,7 +56,15 @@ public class RunningGameScreen : MonoBehaviour
     public void IndicateCorrectHold()
     {
         correctFeedbackFrame.SetActive(true);
-        //sleep 0.5s
+        StartCoroutine(HideCorrectFeedbackAfterDelay());
+    }
+
+    private IEnumerator HideCorrectFeedbackAfterDelay()
+    {
+        // Wait for 0.5 seconds
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide correct hold frame after the delay
         correctFeedbackFrame.SetActive(false);
     }
 
@@ -66,7 +72,15 @@ public class RunningGameScreen : MonoBehaviour
     {
         //show incorrect hold frame for 0.5 seconds
         incorrectFeedbackFrame.SetActive(true);
-        //sleep 0.5s
+        StartCoroutine(HideIncorrectFeedbackAfterDelay());
+    }
+
+    private IEnumerator HideIncorrectFeedbackAfterDelay()
+    {
+        // Wait for 0.5 seconds
+        yield return new WaitForSeconds(0.5f);
+
+        // Hide incorrect hold frame after the delay
         incorrectFeedbackFrame.SetActive(false);
     }
 
@@ -80,6 +94,19 @@ public class RunningGameScreen : MonoBehaviour
         currentHold = 0;
     }
 
-    //TODO: rewrite into game state object
+    public void UpdateGameState(int progress, bool isCorrect) 
+    {
+        if (isCorrect) 
+        {
+            IndicateCorrectHold();
+        }
+        else 
+        {
+            IndicateIncorrectHold();
+        }
+        UpdateCurrentHold(progress);
+        currentHoldText.text = "Griff " + currentHold + "/10";
+    }
+
 
 }
