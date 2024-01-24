@@ -20,10 +20,18 @@ public class SequenceGameScreen : MonoBehaviour
 
     public void SetActive(bool active)
     {
+        if (!active)
+        {
+            for (int i = 0; i < sequenceButtons.Length; i++)
+            {
+                sequenceButtons[i].SetActive(false);
+            }
+            overlay.SetActive(false);
+        }
         gameObject.SetActive(active);
     }
 
-    private IEnumerator StartCountdown() 
+    public IEnumerator StartCountdown() 
     {
         countdownText.text = "3";
         yield return new WaitForSeconds(1);
@@ -52,8 +60,6 @@ public class SequenceGameScreen : MonoBehaviour
 
     public IEnumerator PlaySequence(string sequence)
     {
-        StartCoroutine(StartCountdown());
-
         string filteredSequence = "";
         foreach (char c in sequence)
         {
