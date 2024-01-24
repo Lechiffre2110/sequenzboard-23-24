@@ -90,4 +90,9 @@ public class BluetoothConnector
             _serialPort.Close();
         }
     }
+
+    public SerialPort GetSerialPort()
+    {
+        return _serialPort;
+    }
 }
