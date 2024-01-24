@@ -1,12 +1,45 @@
 using UnityEngine;
-public class Board : IBoard 
+public class Board : MonoBehaviour
 {
     private BluetoothConnector _bluetoothConnector;
+    public delegate void BoardMessageReceivedEventHandler(string message);
+    public static event BoardMessageReceivedEventHandler OnBoardMessageReceived;
 
-    public Board()
+    private float readMessageTimer = 0.0f;
+    private float readMessageInterval = 0.9f;
+
+
+    void Start()
     {
         _bluetoothConnector = new BluetoothConnector();
+        ConnectToBoard();
     }
+
+    void Update()
+    {
+        // Update the timer
+        readMessageTimer += Time.deltaTime;
+
+        // Check if it's time to read a message
+        if (readMessageTimer >= readMessageInterval)
+        {
+            try 
+            {
+                ReadMessageFromBoard();
+            }
+            catch (System.TimeoutException ex)
+            {
+                Debug.Log(ex.Message);
+            }
+            readMessageTimer = 0.0f; // Reset the timer
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        DisconnectFromBoard();
+    }
+
     public void ConnectToBoard()
     {
         _bluetoothConnector.StartBluetoothConnection();
@@ -29,7 +62,12 @@ public class Board : IBoard
     {
         try
         {
-            return _bluetoothConnector.ReadData();
+            string data = _bluetoothConnector.ReadData();
+            if (!string.IsNullOrEmpty(data))
+            {
+                OnBoardMessageReceived(data);
+            }
+            return data;
         }
         catch (BoardNotConnectedException ex)
         {

@@ -9,23 +9,31 @@ public class Game : IGame
 {
     private string _currentSequence;
     private string _currentGameMode;
-    private IBoard _board;
+    //private IBoard _board;
     private List<char> _inputSequence = new List<char>();
     public string _previousInput = ""; //TODO: adjust logic
+    private int _progress = 0;
+
+    public delegate void OnGameStartedEventHandler(string name, string sequence);
+    public static event OnGameStartedEventHandler OnGameStarted;
+    public delegate void OnGameUpdatedEventHandler(int progress, bool isCorrect);
+    public static event OnGameUpdatedEventHandler OnGameUpdated;
 
 
     public Game()
     {
         _currentSequence = "";
         _currentGameMode = "";
-        _board = new Board();
     }
 
     public void StartGame(string gameMode)
     {
         _currentGameMode = gameMode;
         _currentSequence = GenerateSequence(10);
-        _board.SendMessageToBoard(_currentSequence);
+
+        //Update to use event logic for sending message to board
+        OnGameStarted("TEST_NAME", _currentSequence);
+        //_board.SendMessageToBoard(_currentSequence);
     }
 
     public string GetCurrentSequence()
@@ -38,44 +46,56 @@ public class Game : IGame
         throw new System.NotImplementedException();
     }
 
-    public void UpdateGameState() {
-        GetBoardInput();
+    public void UpdateGameState(string input) {
+        Debug.Log("GAME: " + input);
+        /*
+        if (input == _previousInput) {
+            return;
+        }
+        */
+
+        _previousInput = input;
+        _inputSequence.Add(input[0]);
+        //Log the input sequence
+        Debug.Log("Input sequence: " + string.Join("", _inputSequence.ToArray()));
+
         bool inputIsValid = ValidateBoardInput();
+
         if (!inputIsValid) {
+            Debug.Log("Wrong input");
+            OnGameUpdated(0, false);
+            _progress = 0;
             //reset game state and give feedback about incorrectness of user input
             _inputSequence = new List<char>();
             _previousInput = "";
             //display wrong input on game running screen
             //reset progress on game running screen
         }
-    }
 
-    public void GetBoardInput()
-    {
-        string input = _board.ReadMessageFromBoard();
-        if (input != "" && input != _previousInput)
-        {
-            _inputSequence.Add(input[0]);
-            _previousInput = input;
-            Debug.Log("Input: " + input);
+        else {
+            _progress++;
+            OnGameUpdated(_progress, true);
         }
     }
 
     private bool ValidateBoardInput()
     {
-        if (_inputSequence.Count == 0)
+        if (_inputSequence.Count == 0 || _inputSequence.Count > _currentSequence.Length)
         {
-            return true;
+            return false;
         }
+
         for (int i = 0; i < _inputSequence.Count; i++)
         {
             if (_inputSequence[i] != _currentSequence[i])
             {
+                Debug.Log("Wrong input at " + i + " expected " + _currentSequence[i] + " got " + _inputSequence[i]);
                 return false;
             }
         }
+
         return true;
-    }
+}
 
     public void EndGame()
     {
@@ -101,33 +121,25 @@ public class Game : IGame
     }
 
     private string GenerateSequence(int sequenceLength)
+{
+    StringBuilder sequenceBuilder = new StringBuilder();
+    // TODO: REMOVE IT'S ONLY FOR TESTING
+    sequenceBuilder.Append("AAA");
+
+    for (int i = 0; i < sequenceLength; i++)
     {
-        StringBuilder sequenceBuilder = new StringBuilder();
-        for (int i = 0; i < sequenceLength; i++)
+        Hold hold = HoldExtensions.GetRandomHold();
+        
+        // Never have two of the same holds in a row
+        if (i > 0 && sequenceBuilder[i - 1] != hold.ToHoldString()[0])
         {
-            if (i == 0 || i == 1)
-            {
-                sequenceBuilder.Append(HoldExtensions.GetRandomHold());
-                sequenceBuilder.Append(HoldInstructionExtensions.GetStartHoldInstruction());
-            }
-            else if (i == sequenceLength - 1 || i == sequenceLength - 2)
-            {
-                sequenceBuilder.Append(HoldExtensions.GetRandomHold());
-                sequenceBuilder.Append(HoldInstructionExtensions.GetEndHoldInstruction());
-            }
-            else
-            {
-                sequenceBuilder.Append(HoldExtensions.GetRandomHold());
-                sequenceBuilder.Append(HoldInstructionExtensions.GetRandomHoldInstruction());
-            }
+            sequenceBuilder.Append(hold.ToHoldString()); // Use the ToHoldString method
+            continue;
         }
-        string sequence = sequenceBuilder.ToString();
-        Debug.Log(sequence);
-        return sequence;
     }
 
-    public void QuitGame()
-    {
-        _board.DisconnectFromBoard();
-    }
+    string sequence = sequenceBuilder.ToString();
+    Debug.Log(sequence);
+    return sequence;
+}
 }
