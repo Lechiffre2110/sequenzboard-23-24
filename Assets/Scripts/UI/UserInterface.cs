@@ -8,6 +8,8 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private GameObject gameScreen;
     [SerializeField] private SequenceGameScreen sequenceGameScreen;
 
+    [SerializeField] private Menu menu;
+
     [SerializeField] private RunningGameScreen gameRunningScreen;
     [SerializeField] private GameObject settingsScreen;
     [SerializeField] private GameObject helpScreen;
@@ -116,6 +118,16 @@ public class UserInterface : MonoBehaviour
         ChangeScreen(Screen.Help);
     }
 
+    public void OpenMenu() 
+    {
+        menu.OpenMenu();
+    }
+
+    public void CloseMenu()
+    {
+        menu.CloseMenu();
+    }
+
     public void QuitGame() 
     {
         Application.Quit();
@@ -124,12 +136,14 @@ public class UserInterface : MonoBehaviour
     public void PlaySequence(string sequence) 
     {
         ChangeScreen(Screen.Sequence);
+        StartCoroutine(sequenceGameScreen.StartCountdown());
         StartCoroutine(sequenceGameScreen.PlaySequence(sequence));
     }
 
-    public void UpdateGameState() 
+    public void UpdateGameState(int progress, bool correctInput) 
     {
-        //gameRunningScreen.UpdateGameState();
+        Debug.Log("Updating game state");
+        gameRunningScreen.UpdateGameState(progress, correctInput);
     }
     
 }
