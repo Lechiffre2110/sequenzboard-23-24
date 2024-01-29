@@ -11,16 +11,24 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private Menu menu;
 
     [SerializeField] private RunningGameScreen gameRunningScreen;
+
+    [SerializeField] private CustomSequenceScreen customSequenceScreen;
     [SerializeField] private GameObject settingsScreen;
     [SerializeField] private GameObject helpScreen;
     private Screen currentScreen;
     private Screen previousScreen;
+    private Stack<Screen> screenStack = new Stack<Screen>();
+
+
+    public delegate void ChangeScreenEvent(string screen);
+    public static event ChangeScreenEvent OnChangeScreen;
 
 
     // Start is called before the first frame update
     void Start()
     {
         currentScreen = Screen.MainMenu;
+        previousScreen = Screen.MainMenu;
     }
 
     // Update is called once per frame
@@ -31,8 +39,10 @@ public class UserInterface : MonoBehaviour
 
     public void ChangeScreen(Screen screen) 
     {
+        screenStack.Push(currentScreen);
         previousScreen = currentScreen;
         currentScreen = screen;
+
         switch (screen) 
         {
             case Screen.MainMenu:
@@ -50,6 +60,7 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 gameRunningScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
+                OnChangeScreen?.Invoke("Mode");
                 break;
             case Screen.Sequence:
                 mainMenuScreen.SetActive(false);
@@ -58,6 +69,17 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 sequenceGameScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
+                OnChangeScreen?.Invoke("Sequence");
+                break;
+            case Screen.CustomSequence:
+                mainMenuScreen.SetActive(false);
+                gameScreen.SetActive(false);
+                settingsScreen.SetActive(false);
+                helpScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
+                customSequenceScreen.SetActive(true);
+                gameRunningScreen.SetActive(false);
+                OnChangeScreen?.Invoke("Custom Sequence");
                 break;
             case Screen.Running:
                 mainMenuScreen.SetActive(false);
@@ -66,6 +88,7 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 gameRunningScreen.SetActive(true);
                 sequenceGameScreen.SetActive(false);
+                OnChangeScreen?.Invoke("Running");
                 break;
             case Screen.Settings:
                 mainMenuScreen.SetActive(false);
@@ -87,9 +110,10 @@ public class UserInterface : MonoBehaviour
     }
     public void NavigateBack() 
     {
-        if (previousScreen != null) 
+        if (screenStack.Count > 0) 
         {
-            ChangeScreen(previousScreen);
+            Screen previous = screenStack.Pop();
+            ChangeScreen(previous);
         }
     }
 
@@ -118,6 +142,11 @@ public class UserInterface : MonoBehaviour
         ChangeScreen(Screen.Help);
     }
 
+    public void DisplayCustomSequenceScreen() 
+    {
+        ChangeScreen(Screen.CustomSequence);
+    }
+
     public void OpenMenu() 
     {
         menu.OpenMenu();
@@ -144,6 +173,11 @@ public class UserInterface : MonoBehaviour
     {
         Debug.Log("Updating game state");
         gameRunningScreen.UpdateGameState(progress, correctInput);
+    }
+
+    public void HandleSequenceInput(string input) 
+    {
+        customSequenceScreen.HandleSequenceInput(input);
     }
     
 }
