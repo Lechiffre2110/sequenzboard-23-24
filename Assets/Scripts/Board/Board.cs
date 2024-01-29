@@ -6,7 +6,7 @@ public class Board : MonoBehaviour
     public static event BoardMessageReceivedEventHandler OnBoardMessageReceived;
 
     private float readMessageTimer = 0.0f;
-    private float readMessageInterval = 0.9f;
+    private float readMessageInterval = 0.05f;
 
 
     void Start()
