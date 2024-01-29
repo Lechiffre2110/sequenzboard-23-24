@@ -1,6 +1,6 @@
 public interface IGame 
 {
-    void StartGame(string gameMode);
+    void StartGame(string gameMode, string sequence = "");
 
     void StartGameFromSequence(string sequence);
     void EndGame();

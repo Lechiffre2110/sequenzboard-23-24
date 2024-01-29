@@ -26,13 +26,23 @@ public class Game : IGame
         _currentGameMode = "";
     }
 
-    public void StartGame(string gameMode)
+    public void StartGame(string gameMode, string sequence = "")
     {
-        _currentGameMode = gameMode;
-        _currentSequence = GenerateSequence(10);
+        if (gameMode != "normal" && gameMode != "custom")
+        {
+            throw new System.ArgumentException("Invalid game mode");
+        }
+        if (gameMode == "normal")
+        {
+            _currentSequence = GenerateSequence(10);
+            OnGameStarted("Zufallssequenz", _currentSequence);
+        } else {
+            _currentSequence = sequence;
+            OnGameStarted("TEST_NAME", _currentSequence);
+        }
 
         //Update to use event logic for sending message to board
-        OnGameStarted("TEST_NAME", _currentSequence);
+        //OnGameStarted("TEST_NAME", _currentSequence);
         //_board.SendMessageToBoard(_currentSequence);
     }
 
@@ -121,25 +131,26 @@ public class Game : IGame
     }
 
     private string GenerateSequence(int sequenceLength)
-{
-    StringBuilder sequenceBuilder = new StringBuilder();
-    // TODO: REMOVE IT'S ONLY FOR TESTING
-    sequenceBuilder.Append("AAA");
-
-    for (int i = 0; i < sequenceLength; i++)
     {
-        Hold hold = HoldExtensions.GetRandomHold();
-        
-        // Never have two of the same holds in a row
-        if (i > 0 && sequenceBuilder[i - 1] != hold.ToHoldString()[0])
-        {
-            sequenceBuilder.Append(hold.ToHoldString()); // Use the ToHoldString method
-            continue;
-        }
-    }
+        StringBuilder sequenceBuilder = new StringBuilder();
+        // TODO: REMOVE IT'S ONLY FOR TESTING
+        sequenceBuilder.Append("AAA");
 
-    string sequence = sequenceBuilder.ToString();
-    Debug.Log(sequence);
-    return sequence;
-}
+        for (int i = 0; i < sequenceLength; i++)
+        {
+            Hold hold;
+
+            // Never have two of the same holds in a row
+            do
+            {
+                hold = HoldExtensions.GetRandomHold();
+            } while (i > 0 && sequenceBuilder[i - 1] == hold.ToHoldString()[0]);
+
+            sequenceBuilder.Append(hold.ToHoldString());
+        }
+
+        string sequence = sequenceBuilder.ToString();
+        Debug.Log(sequence);
+        return sequence;
+    }
 }

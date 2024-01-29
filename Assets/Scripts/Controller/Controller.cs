@@ -5,8 +5,12 @@ using UnityEngine;
 public class Controller : MonoBehaviour
 {
     private IGame _game;
+    private Data _data;
+    private string _currentScreen = "Custom Sequence";
     [SerializeField] private Board _board;
     [SerializeField] private UserInterface _userInterface;
+
+
 
     void Start()
     {
@@ -19,6 +23,10 @@ public class Controller : MonoBehaviour
         Board.OnBoardMessageReceived += HandleBoardMessageReceived;
         Game.OnGameUpdated += _userInterface.UpdateGameState;
         Game.OnGameStarted += SendSequenceToBoard;
+        UserInterface.OnChangeScreen += HandleScreenChange;
+        CustomSequenceScreen.OnCustomSequenceComplete += StartGameWithCustomSequence;
+        _data = new Data();
+        CustomSequenceScreen.OnSequenceSave += _data.SaveSequence;
     }
 
     void OnDisable()
@@ -30,7 +38,8 @@ public class Controller : MonoBehaviour
 
     void SendSequenceToBoard(string name, string sequence)
     {
-        _board.SendMessageToBoard("name sequence");
+        _board.SendMessageToBoard("!");
+        _board.SendMessageToBoard(sequence);
     }
 
     void HandleBoardMessageReceived(string input)
@@ -43,10 +52,19 @@ public class Controller : MonoBehaviour
         {
             //Ignore any "No message received" messages
         }
-        else {
+
+        if (_currentScreen == "Custom Sequence")
+        {
+            _userInterface.HandleSequenceInput(input);
+        } else if (_currentScreen == "Running") {
             _game.UpdateGameState(input);
         }
         Debug.Log("CONTROLLER: " + input);
+    }
+
+    void HandleScreenChange(string screen)
+    {
+        _currentScreen = screen;
     }
 
     void HandleGameUpdated(int progress, bool isCorrect)
@@ -57,6 +75,12 @@ public class Controller : MonoBehaviour
     public void StartGameWithRandomSequence()
     {
         _game.StartGame("normal");
+        _userInterface.PlaySequence(_game.GetCurrentSequence());
+    }
+
+    public void StartGameWithCustomSequence(string sequence)
+    {
+        _game.StartGame("custom", sequence);
         _userInterface.PlaySequence(_game.GetCurrentSequence());
     }
 } 
