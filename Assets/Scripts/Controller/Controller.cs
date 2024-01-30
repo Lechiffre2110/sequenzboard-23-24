@@ -62,6 +62,7 @@ public class Controller : MonoBehaviour
             _userInterface.HandleSequenceInput(input);
         } else if (_currentScreen == "Running" && input.Length == 1) {
             _game.UpdateGameState(input);
+            _userInterface.ShowHold(input);
         }
         Debug.Log("CONTROLLER: " + input);
     }

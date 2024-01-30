@@ -169,6 +169,11 @@ public class UserInterface : MonoBehaviour
         gameRunningScreen.UpdateGameState(progress, correctInput);
     }
 
+    public void ShowHold(string holdName) 
+    {
+        gameRunningScreen.ShowHold(holdName);
+    }
+
     public void HandleSequenceInput(string input) 
     {
         customSequenceScreen.HandleSequenceInput(input);
