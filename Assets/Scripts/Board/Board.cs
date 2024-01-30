@@ -29,7 +29,7 @@ public class Board : MonoBehaviour
             }
             catch (System.TimeoutException ex)
             {
-                Debug.Log(ex.Message);
+                //Debug.Log(ex.Message); TODO: remove
             }
             readMessageTimer = 0.0f; // Reset the timer
         }
