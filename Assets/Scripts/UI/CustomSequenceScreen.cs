@@ -30,7 +30,7 @@ public class CustomSequenceScreen : MonoBehaviour
 
     private void AddHoldToSequence(string hold)
     {
-        if (hold.Length == 1 && hold[0] >= 'A' && hold[0] <= 'O')
+        if (hold.Length == 1 && hold[0] >= 'A' && hold[0] <= 'G')
         {
             sequenceString += hold;
         }

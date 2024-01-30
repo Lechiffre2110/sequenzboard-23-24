@@ -43,10 +43,6 @@ public class Game : IGame
             _currentSequence = sequence;
             OnGameStarted("TEST_NAME", _currentSequence);
         }
-
-        //Update to use event logic for sending message to board
-        //OnGameStarted("TEST_NAME", _currentSequence);
-        //_board.SendMessageToBoard(_currentSequence);
     }
 
     public string GetCurrentSequence()
@@ -60,16 +56,9 @@ public class Game : IGame
     }
 
     public void UpdateGameState(string input) {
-        /*
-        if (input == _previousInput) {
-            return;
-        }
-        */
 
         _previousInput = input;
         _inputSequence.Add(input[0]);
-        //Log the input sequence
-        Debug.Log("Input sequence: " + string.Join("", _inputSequence.ToArray()));
 
         bool inputIsValid = ValidateBoardInput();
 
@@ -139,7 +128,7 @@ public class Game : IGame
     private string GenerateSequence(int sequenceLength)
     {
         StringBuilder sequenceBuilder = new StringBuilder();
-        
+
         for (int i = 0; i < sequenceLength; i++)
         {
             Hold hold;

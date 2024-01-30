@@ -96,30 +96,6 @@ public class SequenceGameScreen : MonoBehaviour
                 case 'G':
                     yield return ShowHold(sequenceButtons[6], 6);
                     break;
-                case 'H':
-                    yield return ShowHold(sequenceButtons[7], 7);
-                    break;
-                case 'I':
-                    yield return ShowHold(sequenceButtons[8], 8);
-                    break;
-                case 'J':
-                    yield return ShowHold(sequenceButtons[9]);
-                    break;
-                case 'K':
-                    yield return ShowHold(sequenceButtons[10]);
-                    break;
-                case 'L':
-                    yield return ShowHold(sequenceButtons[11]);
-                    break;
-                case 'M':
-                    yield return ShowHold(sequenceButtons[12]);
-                    break;
-                case 'N':
-                    yield return ShowHold(sequenceButtons[13]);
-                    break;
-                case 'O':
-                    yield return ShowHold(sequenceButtons[14]);
-                    break;
             }
 
         }
