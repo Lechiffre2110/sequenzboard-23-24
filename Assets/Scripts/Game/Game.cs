@@ -139,9 +139,7 @@ public class Game : IGame
     private string GenerateSequence(int sequenceLength)
     {
         StringBuilder sequenceBuilder = new StringBuilder();
-        // TODO: REMOVE IT'S ONLY FOR TESTING
-        sequenceBuilder.Append("AAA");
-
+        
         for (int i = 0; i < sequenceLength; i++)
         {
             Hold hold;
