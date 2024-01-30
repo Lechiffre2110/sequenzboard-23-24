@@ -23,7 +23,7 @@ public enum Hold
 
 public static class HoldExtensions
 {
-    public static readonly int NumberOfHolds = Enum.GetValues(typeof(Hold)).Length;
+    public static readonly int NumberOfHolds = 7;
     
     private static readonly Random random = new Random();
     public static Hold GetRandomHold()
