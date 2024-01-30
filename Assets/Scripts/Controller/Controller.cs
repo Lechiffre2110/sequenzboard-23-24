@@ -43,8 +43,7 @@ public class Controller : MonoBehaviour
 
     void SendSequenceToBoard(string name, string sequence)
     {
-        _board.SendMessageToBoard("!");
-        _board.SendMessageToBoard(sequence);
+        _board.SendMessageToBoard("!"+sequence);
     }
 
     void HandleBoardMessageReceived(string input)
