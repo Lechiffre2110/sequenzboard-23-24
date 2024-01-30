@@ -31,6 +31,39 @@ public class Data
             return allSequences;
         }
 
+        public List<string> GetSequenceNames()
+        {
+            //Establish db connection
+            var client = new MongoClient(connectionUrl);
+            var db = client.GetDatabase(dbName);
+            var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
+
+            var results = sequenceCollection.Find(_ => true);
+
+            List<string> allSequences = new List<string>();
+
+            foreach (var result in results.ToList())
+            {
+                allSequences.Add(result.name);
+            }
+
+            return allSequences;
+        }
+
+        public string LoadSequence(string name)
+        {
+            //Establish db connection
+            var client = new MongoClient(connectionUrl);
+            var db = client.GetDatabase(dbName);
+            var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
+
+            var filter = Builders<SequenceModel>.Filter.Eq("name", name);
+
+            var result = sequenceCollection.Find(filter).FirstOrDefault();
+
+            return result.sequence;
+        }
+
         public void SaveSequence(string name, string sequence)
         {
             Debug.Log("SaveSequence: " + name + " " + sequence);
