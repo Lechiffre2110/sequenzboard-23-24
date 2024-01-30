@@ -5,6 +5,5 @@ public enum Screen {
     Sequence,
     CustomSequence,
     Running,
-    Settings, 
-    Help
+    Settings
 }
