@@ -159,7 +159,6 @@ public class UserInterface : MonoBehaviour
     public void PlaySequence(string sequence) 
     {
         ChangeScreen(Screen.Sequence);
-        StartCoroutine(sequenceGameScreen.StartCountdown());
         StartCoroutine(sequenceGameScreen.PlaySequence(sequence));
     }
 

@@ -7,56 +7,19 @@ public class SequenceGameScreen : MonoBehaviour
     [SerializeField] private Audio audio;
     public GameObject[] sequenceButtons;
     public GameObject overlay;
-    public TMP_Text countdownText;
     private string _currentSequence;
-
-    void Start()
-    {
-        overlay.SetActive(false);
-        for (int i = 0; i < sequenceButtons.Length; i++)
-        {
-            sequenceButtons[i].SetActive(false);
-        }
-    }
 
     public void SetActive(bool active)
     {
-        if (!active)
-        {
-            for (int i = 0; i < sequenceButtons.Length; i++)
-            {
-                sequenceButtons[i].SetActive(false);
-            }
-            overlay.SetActive(false);
-        }
         gameObject.SetActive(active);
     }
 
-    public IEnumerator StartCountdown() 
-    {
-        countdownText.text = "3";
-        yield return new WaitForSeconds(1);
-        countdownText.text = "2";
-        yield return new WaitForSeconds(1);
-        countdownText.text = "1";
-        yield return new WaitForSeconds(1);
-        countdownText.text = "GO!";
-        yield return new WaitForSeconds(1);
-        countdownText.text = "";
-        for (int i = 0; i < sequenceButtons.Length; i++)
-        {
-            sequenceButtons[i].SetActive(true);
-        }
-        overlay.SetActive(true);
-        yield return new WaitForSeconds(2);
-    }
-
-    private IEnumerator ShowHold(GameObject hold, int index = 7)
+    private IEnumerator ShowHold(GameObject hold, int index = 6)
     {
         int previousIndex = hold.transform.GetSiblingIndex();
         hold.transform.SetSiblingIndex(10000);
         PlaySound(index);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.5f); //TODO: could be a setting for difficulty
         hold.transform.SetSiblingIndex(previousIndex);
     }
 
