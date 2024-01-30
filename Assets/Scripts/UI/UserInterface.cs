@@ -15,6 +15,8 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private CustomSequenceScreen customSequenceScreen;
     [SerializeField] private GameObject settingsScreen;
     [SerializeField] private GameObject helpScreen;
+
+    [SerializeField] private GameWonScreen gameWonScreen;
     private List<Screen> screenHistory = new List<Screen>();
 
 
@@ -49,6 +51,7 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 gameRunningScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 break;
             case Screen.Game:
                 mainMenuScreen.SetActive(false);
@@ -57,6 +60,7 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 gameRunningScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Mode");
                 break;
             case Screen.Sequence:
@@ -66,6 +70,7 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 sequenceGameScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Sequence");
                 break;
             case Screen.CustomSequence:
@@ -76,6 +81,7 @@ public class UserInterface : MonoBehaviour
                 sequenceGameScreen.SetActive(false);
                 customSequenceScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Custom Sequence");
                 break;
             case Screen.Running:
@@ -85,6 +91,7 @@ public class UserInterface : MonoBehaviour
                 helpScreen.SetActive(false);
                 gameRunningScreen.SetActive(true);
                 sequenceGameScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Running");
                 break;
             case Screen.Settings:
@@ -93,6 +100,7 @@ public class UserInterface : MonoBehaviour
                 settingsScreen.SetActive(true);
                 helpScreen.SetActive(false);
                 gameRunningScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
                 break;
             case Screen.Help:
@@ -101,7 +109,17 @@ public class UserInterface : MonoBehaviour
                 settingsScreen.SetActive(false);
                 helpScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
+                break;
+            case Screen.GameWon:
+                mainMenuScreen.SetActive(false);
+                gameScreen.SetActive(false);
+                settingsScreen.SetActive(false);
+                helpScreen.SetActive(false);
+                gameRunningScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
+                gameWonScreen.SetActive(true);
                 break;
         }
     }
@@ -176,6 +194,11 @@ public class UserInterface : MonoBehaviour
     public void HandleSequenceInput(string input) 
     {
         customSequenceScreen.HandleSequenceInput(input);
+    }
+
+    public void HandleGameWon() 
+    {
+        ChangeScreen(Screen.GameWon);
     }
     
 }

@@ -25,6 +25,8 @@ public class Controller : MonoBehaviour
         Game.OnGameStarted += SendSequenceToBoard;
         UserInterface.OnChangeScreen += HandleScreenChange;
         CustomSequenceScreen.OnCustomSequenceComplete += StartGameWithCustomSequence;
+        Game.OnGameWon += _userInterface.HandleGameWon;
+        LoadSequenceDropdown.OnLoadSequence += StartGameWithCustomSequence;
         _data = new Data();
         CustomSequenceScreen.OnSequenceSave += _data.SaveSequence;
     }
@@ -34,6 +36,9 @@ public class Controller : MonoBehaviour
         Board.OnBoardMessageReceived -= HandleBoardMessageReceived;
         Game.OnGameUpdated -= _userInterface.UpdateGameState;
         Game.OnGameStarted -= SendSequenceToBoard;
+        UserInterface.OnChangeScreen -= HandleScreenChange;
+        CustomSequenceScreen.OnCustomSequenceComplete -= StartGameWithCustomSequence;
+        CustomSequenceScreen.OnSequenceSave -= _data.SaveSequence;
     }
 
     void SendSequenceToBoard(string name, string sequence)
@@ -53,10 +58,10 @@ public class Controller : MonoBehaviour
             //Ignore any "No message received" messages
         }
 
-        if (_currentScreen == "Custom Sequence")
+        if (_currentScreen == "Custom Sequence" && input.Length == 1)
         {
             _userInterface.HandleSequenceInput(input);
-        } else if (_currentScreen == "Running") {
+        } else if (_currentScreen == "Running" && input.Length == 1) {
             _game.UpdateGameState(input);
         }
         Debug.Log("CONTROLLER: " + input);

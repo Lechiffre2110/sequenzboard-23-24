@@ -19,6 +19,9 @@ public class Game : IGame
     public delegate void OnGameUpdatedEventHandler(int progress, bool isCorrect);
     public static event OnGameUpdatedEventHandler OnGameUpdated;
 
+    public static event OnGameWonEventHandler OnGameWon;
+    public delegate void OnGameWonEventHandler();
+
 
     public Game()
     {
@@ -57,7 +60,6 @@ public class Game : IGame
     }
 
     public void UpdateGameState(string input) {
-        Debug.Log("GAME: " + input);
         /*
         if (input == _previousInput) {
             return;
@@ -85,6 +87,10 @@ public class Game : IGame
         else {
             _progress++;
             OnGameUpdated(_progress, true);
+        }
+
+        if (_progress == _currentSequence.Length) {
+            OnGameWon();
         }
     }
 
