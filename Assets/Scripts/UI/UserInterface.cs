@@ -15,9 +15,7 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private CustomSequenceScreen customSequenceScreen;
     [SerializeField] private GameObject settingsScreen;
     [SerializeField] private GameObject helpScreen;
-    private Screen currentScreen;
-    private Screen previousScreen;
-    private Stack<Screen> screenStack = new Stack<Screen>();
+    private List<Screen> screenHistory = new List<Screen>();
 
 
     public delegate void ChangeScreenEvent(string screen);
@@ -27,8 +25,7 @@ public class UserInterface : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentScreen = Screen.MainMenu;
-        previousScreen = Screen.MainMenu;
+        screenHistory.Add(Screen.MainMenu);
     }
 
     // Update is called once per frame
@@ -39,9 +36,9 @@ public class UserInterface : MonoBehaviour
 
     public void ChangeScreen(Screen screen) 
     {
-        screenStack.Push(currentScreen);
-        previousScreen = currentScreen;
-        currentScreen = screen;
+        if (screenHistory[screenHistory.Count - 1] != screen) {
+            screenHistory.Add(screen);
+        }
 
         switch (screen) 
         {
@@ -110,10 +107,11 @@ public class UserInterface : MonoBehaviour
     }
     public void NavigateBack() 
     {
-        if (screenStack.Count > 0) 
+        if (screenHistory.Count > 1) 
         {
-            Screen previous = screenStack.Pop();
-            ChangeScreen(previous);
+            screenHistory.RemoveAt(screenHistory.Count - 1);
+            Screen previousScreen = screenHistory[screenHistory.Count - 1];
+            ChangeScreen(previousScreen);
         }
     }
 
