@@ -65,6 +65,10 @@ public class Controller : MonoBehaviour
     void HandleScreenChange(string screen)
     {
         _currentScreen = screen;
+        if (screen == "Custom Sequence")
+        {
+            _board.SendMessageToBoard("?");
+        }
     }
 
     void HandleGameUpdated(int progress, bool isCorrect)
