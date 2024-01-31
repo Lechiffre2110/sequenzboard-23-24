@@ -14,13 +14,24 @@ public class Game : IGame
     public string _previousInput = ""; //TODO: adjust logic
     private int _progress = 0;
 
+    private string[] _trainingSubsequences;
+    private int _trainingSubsequenceIndex = 0;
+
+    private int _trainingProgress = 0;
+
+    private string _previousTrainingInput = "";
+
+
     public delegate void OnGameStartedEventHandler(string name, string sequence);
     public static event OnGameStartedEventHandler OnGameStarted;
     public delegate void OnGameUpdatedEventHandler(int progress, bool isCorrect);
     public static event OnGameUpdatedEventHandler OnGameUpdated;
-
     public static event OnGameWonEventHandler OnGameWon;
     public delegate void OnGameWonEventHandler();
+    public delegate void OnTrainingGameStartedEventHandler(string name, string sequence);
+    public static event OnTrainingGameStartedEventHandler OnTrainingGameStarted;
+    public delegate void OnTrainingGameUpdatedEventHandler(int progress, bool isCorrect);
+    public static event OnTrainingGameUpdatedEventHandler OnTrainingGameUpdated;
 
 
     public Game()
@@ -31,19 +42,95 @@ public class Game : IGame
 
     public void StartGame(string gameMode, string sequence = "")
     {
-        if (gameMode != "normal" && gameMode != "custom")
+        if (gameMode != "normal" && gameMode != "custom" && gameMode != "training")
         {
             throw new System.ArgumentException("Invalid game mode");
         }
         if (gameMode == "normal")
         {
-            _currentSequence = GenerateSequence(10);
+            _currentSequence = GenerateSequence(4); //make this dynamic based on settings
+            _progress = 0;
+            _inputSequence = new List<char>();
             OnGameStarted("Zufallssequenz", _currentSequence);
-        } else {
+        } 
+        else {
             _currentSequence = sequence;
+            _progress = 0;
+            _inputSequence = new List<char>();
             OnGameStarted("TEST_NAME", _currentSequence);
         }
     }
+
+    public void StartTrainingGame() {
+        //_currentSequence = sequence;
+        _trainingProgress = 0;
+        _trainingSubsequenceIndex = 0;
+        _inputSequence = new List<char>();
+        _trainingSubsequences = SplitSequenceIntoSubsequences(_currentSequence);
+        OnTrainingGameStarted("test", _trainingSubsequences[_trainingSubsequenceIndex]);
+    }
+
+    public bool ValidateTrainingInput(string input) {
+        for (int i = 0; i < _inputSequence.Count; i++)
+        {
+            if (_inputSequence[i] != _currentSequence[i])
+            {
+                Debug.Log("Wrong input at " + i + " expected " + _currentSequence[i] + " got " + _inputSequence[i]);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void UpdateTrainingGameState(string input) {
+        _previousTrainingInput = input;
+        _inputSequence.Add(input[0]);
+
+        bool inputIsValid = ValidateTrainingInput(input);
+
+        if (!inputIsValid) {
+            OnTrainingGameUpdated(0, false);
+            _trainingProgress = 0;
+            _inputSequence = new List<char>();
+            _previousTrainingInput = "";
+        }
+
+        else {
+            _trainingProgress++;
+            OnTrainingGameUpdated(_trainingProgress, true);
+        }
+
+        if (_trainingProgress == _trainingSubsequences[_trainingSubsequenceIndex].Length) {
+            _trainingSubsequenceIndex++;
+            if (_trainingSubsequenceIndex == _trainingSubsequences.Length) {
+                Debug.Log("Training game won");
+            }
+            else {
+                _trainingProgress = 0;
+                _inputSequence = new List<char>();
+                //StartCoroutine(Wait(2));
+                OnTrainingGameStarted("training", _trainingSubsequences[_trainingSubsequenceIndex]);
+            }
+        }
+    }
+
+    //function to sleep for 2 seconds
+    IEnumerator Wait(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+    }
+
+    //TRAINING MODE
+    private string[] SplitSequenceIntoSubsequences(string sequence) {
+        string[] subsequences = new string[sequence.Length];
+        for (int i = 0; i < sequence.Length; i++) {
+            subsequences[i] = sequence.Substring(0, i+1);
+            Debug.Log("Subsequence " + i + ": " + subsequences[i]);
+        }
+        return subsequences;
+    }
+
+    //END TRAINING MODE
 
     public string GetCurrentSequence()
     {
@@ -56,7 +143,6 @@ public class Game : IGame
     }
 
     public void UpdateGameState(string input) {
-
         _previousInput = input;
         _inputSequence.Add(input[0]);
 

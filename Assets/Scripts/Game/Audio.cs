@@ -12,6 +12,7 @@ public class Audio : MonoBehaviour
 
     public void PlaySound(int index)
     {
+        Debug.Log("Playing sound " + index);
         if (index < 0 || index >= clips.Length)
         {
             return;

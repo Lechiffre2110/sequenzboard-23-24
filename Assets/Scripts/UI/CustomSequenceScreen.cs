@@ -26,10 +26,8 @@ public class CustomSequenceScreen : MonoBehaviour
 
     private void AddHoldToSequence(string hold)
     {
-        if (hold.Length == 1)
-        {
-            sequenceString += hold;
-        }
+        char[] holdAsChar = hold.ToCharArray();
+        sequenceString += holdAsChar[0].ToString();
         Debug.Log("Sequence: " + GetSequence());
     }
 
@@ -40,15 +38,15 @@ public class CustomSequenceScreen : MonoBehaviour
 
     public void HandleSequenceInput(string hold)
     {
-        string holdName = "Hold " + hold;
-        GameObject holdObject = GameObject.Find(holdName);
-        StartCoroutine(ShowHold(holdObject));
+        int index = ConvertHoldToIndex(hold);
+        GameObject holdObject = holds[index];
+        StartCoroutine(ShowHold(holdObject, index));
         AddHoldToSequence(hold);
     }
     
-    private IEnumerator ShowHold(GameObject hold)
+    private IEnumerator ShowHold(GameObject hold, int index)
     {
-        PlaySound(ConvertHoldToIndex(hold.name));
+        PlaySound(index);
         int previousIndex = hold.transform.GetSiblingIndex();
         hold.transform.SetSiblingIndex(10000);
         yield return new WaitForSeconds(1f);
@@ -73,24 +71,25 @@ public class CustomSequenceScreen : MonoBehaviour
 
     private int ConvertHoldToIndex(string holdName)
     {
-        switch (holdName)
+        char[] holdNameArray = holdName.ToCharArray();
+        switch (holdNameArray[0].ToString())
         {
-            case "Hold A":
+            case "A":
                 return 0;
-            case "Hold B":
+            case "B":
                 return 1;
-            case "Hold C":
+            case "C":
                 return 2;
-            case "Hold D":
+            case "D":
                 return 3;
-            case "Hold E":
+            case "E":
                 return 4;
-            case "Hold F":
+            case "F":
                 return 5;
-            case "Hold G":
+            case "G":
                 return 6;
             default:
-                return 7;
+                return 0;
         }
     }
 }

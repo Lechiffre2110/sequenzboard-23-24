@@ -29,6 +29,15 @@ public class Controller : MonoBehaviour
         LoadSequenceDropdown.OnLoadSequence += StartGameWithCustomSequence;
         _data = new Data();
         CustomSequenceScreen.OnSequenceSave += _data.SaveSequence;
+        TrainingScreen.OnStartTraining += StartTrainingGame;
+        Game.OnTrainingGameStarted += SendSequenceToBoard; //look into this
+        Game.OnTrainingGameUpdated += _userInterface.UpdateTrainingGameState; //look into this
+    }
+
+    void HandleTrainingGameStarted(string name, string sequence)
+    {
+        _board.SendMessageToBoard("!" + sequence);
+        _userInterface.PlayTrainingSequence(sequence);
     }
 
     void OnDisable()
@@ -39,11 +48,17 @@ public class Controller : MonoBehaviour
         UserInterface.OnChangeScreen -= HandleScreenChange;
         CustomSequenceScreen.OnCustomSequenceComplete -= StartGameWithCustomSequence;
         CustomSequenceScreen.OnSequenceSave -= _data.SaveSequence;
+        Game.OnGameWon -= _userInterface.HandleGameWon;
+        LoadSequenceDropdown.OnLoadSequence -= StartGameWithCustomSequence;
+        TrainingScreen.OnStartTraining -= StartTrainingGame;
+        Game.OnTrainingGameStarted -= SendSequenceToBoard; //look into this
+        Game.OnTrainingGameUpdated -= _userInterface.UpdateTrainingGameState; //look into this
     }
 
     void SendSequenceToBoard(string name, string sequence)
     {
         _board.SendMessageToBoard("!"+sequence);
+        _userInterface.PlayTrainingSequence(sequence);
     }
 
     void HandleBoardMessageReceived(string input)
@@ -57,12 +72,17 @@ public class Controller : MonoBehaviour
             //Ignore any "No message received" messages
         }
 
-        if (_currentScreen == "Custom Sequence" && input.Length == 1)
+        if (_currentScreen == "Custom Sequence")
         {
             _userInterface.HandleSequenceInput(input);
-        } else if (_currentScreen == "Running" && input.Length == 1) {
+            Debug.Log("Custom Sequence Screen");
+        } else if (_currentScreen == "Running") {
+            Debug.Log("Running Screen");
             _game.UpdateGameState(input);
             _userInterface.ShowHold(input);
+        } else if (_currentScreen == "Training") {
+            _game.UpdateTrainingGameState(input);
+            _userInterface.ShowTrainingHold(input);
         }
         Debug.Log("CONTROLLER: " + input);
     }
@@ -91,5 +111,10 @@ public class Controller : MonoBehaviour
     {
         _game.StartGame("custom", sequence);
         _userInterface.PlaySequence(_game.GetCurrentSequence());
+    }
+
+    void StartTrainingGame()
+    {
+        _game.StartTrainingGame();
     }
 } 

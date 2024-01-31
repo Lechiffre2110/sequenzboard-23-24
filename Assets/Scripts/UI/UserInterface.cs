@@ -11,11 +11,12 @@ public class UserInterface : MonoBehaviour
     [SerializeField] private Menu menu;
 
     [SerializeField] private RunningGameScreen gameRunningScreen;
-
+    [SerializeField] private TrainingScreen trainingScreen;
     [SerializeField] private CustomSequenceScreen customSequenceScreen;
     [SerializeField] private GameObject settingsScreen;
 
     [SerializeField] private GameWonScreen gameWonScreen;
+
     private List<Screen> screenHistory = new List<Screen>();
 
 
@@ -27,12 +28,6 @@ public class UserInterface : MonoBehaviour
     void Start()
     {
         screenHistory.Add(Screen.MainMenu);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void ChangeScreen(Screen screen) 
@@ -50,6 +45,7 @@ public class UserInterface : MonoBehaviour
                 gameRunningScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
                 gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 break;
             case Screen.Game:
                 mainMenuScreen.SetActive(false);
@@ -58,6 +54,7 @@ public class UserInterface : MonoBehaviour
                 gameRunningScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
                 gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Mode");
                 break;
             case Screen.Sequence:
@@ -67,7 +64,18 @@ public class UserInterface : MonoBehaviour
                 sequenceGameScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
                 gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Sequence");
+                break;
+            case Screen.Training:
+                mainMenuScreen.SetActive(false);
+                gameScreen.SetActive(false);
+                settingsScreen.SetActive(false);
+                sequenceGameScreen.SetActive(false);
+                gameRunningScreen.SetActive(false);
+                gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(true);
+                OnChangeScreen?.Invoke("Training");
                 break;
             case Screen.CustomSequence:
                 mainMenuScreen.SetActive(false);
@@ -77,6 +85,7 @@ public class UserInterface : MonoBehaviour
                 customSequenceScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
                 gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Custom Sequence");
                 break;
             case Screen.Running:
@@ -86,6 +95,7 @@ public class UserInterface : MonoBehaviour
                 gameRunningScreen.SetActive(true);
                 sequenceGameScreen.SetActive(false);
                 gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 OnChangeScreen?.Invoke("Running");
                 break;
             case Screen.Settings:
@@ -94,6 +104,7 @@ public class UserInterface : MonoBehaviour
                 settingsScreen.SetActive(true);
                 gameRunningScreen.SetActive(false);
                 gameWonScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
                 break;
             case Screen.GameWon:
@@ -102,6 +113,7 @@ public class UserInterface : MonoBehaviour
                 settingsScreen.SetActive(false);
                 gameRunningScreen.SetActive(false);
                 sequenceGameScreen.SetActive(false);
+                trainingScreen.SetActive(false);
                 gameWonScreen.SetActive(true);
                 break;
         }
@@ -139,6 +151,11 @@ public class UserInterface : MonoBehaviour
     public void DisplayCustomSequenceScreen() 
     {
         ChangeScreen(Screen.CustomSequence);
+    }
+
+    public void DisplayTrainingScreen() 
+    {
+        ChangeScreen(Screen.Training);
     }
 
     public void OpenMenu() 
@@ -181,6 +198,22 @@ public class UserInterface : MonoBehaviour
     public void HandleGameWon() 
     {
         ChangeScreen(Screen.GameWon);
+    }
+
+    public void UpdateTrainingGameState(int progress, bool correctInput) 
+    {
+        trainingScreen.UpdateGameState(progress, correctInput);
+    }
+
+    public void PlayTrainingSequence(string sequence) 
+    {
+        trainingScreen.PlaySequence(sequence);
+    }
+
+    public void ShowTrainingHold(string holdName) 
+    {
+        Debug.Log("Showing training hold " + holdName);
+        trainingScreen.ShowHold(holdName);
     }
     
 }

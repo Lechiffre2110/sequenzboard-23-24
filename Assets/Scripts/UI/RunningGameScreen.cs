@@ -21,13 +21,14 @@ public class RunningGameScreen : MonoBehaviour
 
     public void ShowHold(string holdName)
     {
-        GameObject holdObject = sequenceButtons[ConvertHoldToIndex(holdName)];
-        StartCoroutine(ShowHold(holdObject));
+        int index = ConvertHoldToIndex(holdName);
+        GameObject holdObject = sequenceButtons[index];
+        StartCoroutine(ShowHold(holdObject, index));
     }
 
-    private IEnumerator ShowHold(GameObject hold)
+    private IEnumerator ShowHold(GameObject hold, int index)
     {
-        PlaySound(ConvertHoldToIndex(hold.name));
+        PlaySound(index);
         int previousIndex = hold.transform.GetSiblingIndex();
         hold.transform.SetSiblingIndex(1000);
         yield return new WaitForSeconds(1f);
@@ -87,7 +88,7 @@ public class RunningGameScreen : MonoBehaviour
             IndicateIncorrectHold();
         }
         UpdateCurrentHold(progress);
-        currentHoldText.text = "Griff " + currentHold + "/10";
+        currentHoldText.text = "Griff " + currentHold + "/4";
     }
 
     public void PlaySound(int index)
@@ -95,23 +96,24 @@ public class RunningGameScreen : MonoBehaviour
         audio.PlaySound(index);
     }
 
-    private int ConvertHoldToIndex(string holdName) 
+    private int ConvertHoldToIndex(string holdName)
     {
-        switch (holdName) 
+        char[] holdChar = holdName.ToCharArray();
+        switch (holdChar[0]) 
         {
-            case "A":
+            case 'A':
                 return 0;
-            case "B":
+            case 'B':
                 return 1;
-            case "C":
+            case 'C':
                 return 2;
-            case "D":
+            case 'D':
                 return 3;
-            case "E":
+            case 'E':
                 return 4;
-            case "F":
+            case 'F':
                 return 5;
-            case "G":
+            case 'G':
                 return 6;
             default:
                 return 0;
