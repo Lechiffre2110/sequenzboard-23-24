@@ -20,6 +20,7 @@ public class Game : IGame
     private int _trainingProgress = 0;
 
     private string _previousTrainingInput = "";
+    private int _length = 0;
 
 
     public delegate void OnGameStartedEventHandler(string name, string sequence);
@@ -48,16 +49,20 @@ public class Game : IGame
         }
         if (gameMode == "normal")
         {
-            _currentSequence = GenerateSequence(4); //make this dynamic based on settings
+            _length = PlayerPrefs.GetInt("length");
+            _currentSequence = GenerateSequence(_length);
             _progress = 0;
             _inputSequence = new List<char>();
             OnGameStarted("Zufallssequenz", _currentSequence);
+            PlayerPrefs.SetInt("currentLength", _length);
+            
         } 
         else {
             _currentSequence = sequence;
             _progress = 0;
             _inputSequence = new List<char>();
-            OnGameStarted("TEST_NAME", _currentSequence);
+            OnGameStarted("Custom", _currentSequence);
+            PlayerPrefs.SetInt("currentLength", _currentSequence.Length);
         }
     }
 
@@ -68,6 +73,7 @@ public class Game : IGame
         _inputSequence = new List<char>();
         _trainingSubsequences = SplitSequenceIntoSubsequences(_currentSequence);
         OnTrainingGameStarted("test", _trainingSubsequences[_trainingSubsequenceIndex]);
+        PlayerPrefs.SetInt("currentLength", _currentSequence.Length);
     }
 
     public bool ValidateTrainingInput(string input) {
@@ -108,16 +114,9 @@ public class Game : IGame
             else {
                 _trainingProgress = 0;
                 _inputSequence = new List<char>();
-                //StartCoroutine(Wait(2));
                 OnTrainingGameStarted("training", _trainingSubsequences[_trainingSubsequenceIndex]);
             }
         }
-    }
-
-    //function to sleep for 2 seconds
-    IEnumerator Wait(float duration)
-    {
-        yield return new WaitForSeconds(duration);
     }
 
     //TRAINING MODE

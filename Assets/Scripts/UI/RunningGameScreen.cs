@@ -11,6 +11,7 @@ public class RunningGameScreen : MonoBehaviour
     public GameObject[] sequenceButtons;
     public TMP_Text currentHoldText;
     private int currentHold = 0;
+    private int sequenceLength = 0;
     public GameObject correctFeedbackFrame;
     public GameObject incorrectFeedbackFrame;
 
@@ -79,6 +80,7 @@ public class RunningGameScreen : MonoBehaviour
 
     public void UpdateGameState(int progress, bool isCorrect) 
     {
+        sequenceLength = PlayerPrefs.GetInt("currentLength");
         if (isCorrect) 
         {
             IndicateCorrectHold();
@@ -88,7 +90,7 @@ public class RunningGameScreen : MonoBehaviour
             IndicateIncorrectHold();
         }
         UpdateCurrentHold(progress);
-        currentHoldText.text = "Griff " + currentHold + "/4";
+        currentHoldText.text = "Griff " + currentHold + "/" + sequenceLength;
     }
 
     public void PlaySound(int index)

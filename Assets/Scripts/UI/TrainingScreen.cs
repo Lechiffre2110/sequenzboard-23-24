@@ -10,10 +10,11 @@ public class TrainingScreen : MonoBehaviour
     [SerializeField] private GameObject correctFeedbackFrame;
 
     [SerializeField] private GameObject incorrectFeedbackFrame;
+    [SerializeField] private TMPro.TMP_Text _currentHoldText;
     [SerializeField] private GameObject overlay;
-    private string _completeSequence = "AAAAAA";
+    private string _completeSequence = "";
+    private int sequenceLength = 0;
 
-    //Event when Training mode is started 
     public delegate void OnStartTrainingEvent();
     public static event OnStartTrainingEvent OnStartTraining;
 
@@ -41,31 +42,27 @@ public class TrainingScreen : MonoBehaviour
 
     private IEnumerator HideCorrectFeedbackAfterDelay()
     {
-        // Wait for 0.5 seconds
         yield return new WaitForSeconds(1f);
 
-        // Hide correct hold frame after the delay
         correctFeedbackFrame.SetActive(false);
     }
 
     public void IndicateIncorrectHold()
     {
-        //show incorrect hold frame for 0.5 seconds
         incorrectFeedbackFrame.SetActive(true);
         StartCoroutine(HideIncorrectFeedbackAfterDelay());
     }
 
     private IEnumerator HideIncorrectFeedbackAfterDelay()
     {
-        // Wait for 0.5 seconds
         yield return new WaitForSeconds(1f);
 
-        // Hide incorrect hold frame after the delay
         incorrectFeedbackFrame.SetActive(false);
     }
 
     public void UpdateGameState(int progress, bool isCorrect) 
     {
+        sequenceLength = PlayerPrefs.GetInt("sequenceLength");
         if (isCorrect) 
         {
             IndicateCorrectHold();
@@ -74,6 +71,7 @@ public class TrainingScreen : MonoBehaviour
         {
             IndicateIncorrectHold();
         }
+        _currentHoldText.text = "Griff " + progress + "/" + sequenceLength;
     }
 
 
