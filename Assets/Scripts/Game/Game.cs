@@ -4,25 +4,18 @@ using UnityEngine;
 using System.Text;
 using System.Linq;
 
-//TODO: remove magic numbers
 public class Game : IGame
 {
-    private string _currentSequence;
-    private string _currentGameMode;
-    //private IBoard _board;
+    private string _currentSequence = "";
+    private string _currentGameMode = "";
     private List<char> _inputSequence = new List<char>();
-    public string _previousInput = ""; //TODO: adjust logic
+    public string _previousInput = "";
     private int _progress = 0;
-
     private string[] _trainingSubsequences;
     private int _trainingSubsequenceIndex = 0;
-
     private int _trainingProgress = 0;
-
     private string _previousTrainingInput = "";
     private int _length = 0;
-
-
     public delegate void OnGameStartedEventHandler(string name, string sequence);
     public static event OnGameStartedEventHandler OnGameStarted;
     public delegate void OnGameUpdatedEventHandler(int progress, bool isCorrect);
@@ -35,12 +28,11 @@ public class Game : IGame
     public static event OnTrainingGameUpdatedEventHandler OnTrainingGameUpdated;
 
 
-    public Game()
-    {
-        _currentSequence = "";
-        _currentGameMode = "";
-    }
-
+    /// <summary>
+    /// Start a new game
+    /// </summary>
+    /// <param name="gameMode">The game mode to start</param>
+    /// <param name="sequence">The sequence to start the game with</param>
     public void StartGame(string gameMode, string sequence = "")
     {
         if (gameMode != "normal" && gameMode != "custom" && gameMode != "training")
@@ -66,6 +58,9 @@ public class Game : IGame
         }
     }
 
+    /// <summary>
+    /// Start a new training game
+    /// </summary>
     public void StartTrainingGame() {
         //_currentSequence = sequence;
         _trainingProgress = 0;
@@ -76,18 +71,27 @@ public class Game : IGame
         PlayerPrefs.SetInt("currentLength", _currentSequence.Length);
     }
 
-    public bool ValidateTrainingInput(string input) {
+    /// <summary>
+    /// Validate the input of the training game
+    /// </summary>
+    /// <param name="input">The input to validate</param>
+    /// <returns>True if the input is valid, false otherwise</returns>
+    private bool ValidateTrainingInput(string input) {
         for (int i = 0; i < _inputSequence.Count; i++)
         {
             if (_inputSequence[i] != _currentSequence[i])
             {
-                Debug.Log("Wrong input at " + i + " expected " + _currentSequence[i] + " got " + _inputSequence[i]);
                 return false;
             }
         }
         return true;
     }
 
+    /// <summary>
+    /// Update the game state
+    /// </summary>
+    /// <param name="input">The input to update the game state with</param>
+    /// <returns>True if the input is valid, false otherwise</returns>
     public void UpdateTrainingGameState(string input) {
         _previousTrainingInput = input;
         _inputSequence.Add(input[0]);
@@ -119,28 +123,33 @@ public class Game : IGame
         }
     }
 
-    //TRAINING MODE
+    /// <summary>
+    /// Split a sequence into subsequences
+    /// </summary>
+    /// <param name="sequence">The sequence to split</param>
+    /// <returns>An array of subsequences</returns>
     private string[] SplitSequenceIntoSubsequences(string sequence) {
         string[] subsequences = new string[sequence.Length];
         for (int i = 0; i < sequence.Length; i++) {
             subsequences[i] = sequence.Substring(0, i+1);
-            Debug.Log("Subsequence " + i + ": " + subsequences[i]);
         }
         return subsequences;
     }
 
-    //END TRAINING MODE
 
+    /// <summary>
+    /// Get the current sequence
+    /// </summary>
+    /// <returns>The current sequence</returns>
     public string GetCurrentSequence()
     {
         return _currentSequence;
     }
 
-    public void StartGameFromSequence(string sequence)
-    {
-        throw new System.NotImplementedException();
-    }
-
+    /// <summary>
+    /// Update the game state
+    /// </summary>
+    /// <param name="input">The input to update the game state with</param>
     public void UpdateGameState(string input) {
         _previousInput = input;
         _inputSequence.Add(input[0]);
@@ -148,14 +157,10 @@ public class Game : IGame
         bool inputIsValid = ValidateBoardInput();
 
         if (!inputIsValid) {
-            Debug.Log("Wrong input");
             OnGameUpdated(0, false);
             _progress = 0;
-            //reset game state and give feedback about incorrectness of user input
             _inputSequence = new List<char>();
             _previousInput = "";
-            //display wrong input on game running screen
-            //reset progress on game running screen
         }
 
         else {
@@ -168,6 +173,10 @@ public class Game : IGame
         }
     }
 
+    /// <summary>
+    /// Validate the input of the game
+    /// </summary>
+    /// <returns>True if the input is valid, false otherwise</returns>
     private bool ValidateBoardInput()
     {
         if (_inputSequence.Count == 0 || _inputSequence.Count > _currentSequence.Length)
@@ -179,37 +188,18 @@ public class Game : IGame
         {
             if (_inputSequence[i] != _currentSequence[i])
             {
-                Debug.Log("Wrong input at " + i + " expected " + _currentSequence[i] + " got " + _inputSequence[i]);
                 return false;
             }
         }
 
         return true;
-}
-
-    public void EndGame()
-    {
-        // Game end screen with score 
-        // Go back to main menu
-        throw new System.NotImplementedException();
     }
 
-    public void PauseGame()
-    {
-        //pause game and show pause screen with resume and restart buttons
-        throw new System.NotImplementedException();
-    }
-
-    public void ResumeGame()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public void RestartGame()
-    {
-        throw new System.NotImplementedException();
-    }
-
+    /// <summary>
+    /// Generate a sequence of a given length
+    /// </summary>
+    /// <param name="sequenceLength">The length of the sequence to generate</param>
+    /// <returns>A string representing the generated sequence</returns>
     private string GenerateSequence(int sequenceLength)
     {
         StringBuilder sequenceBuilder = new StringBuilder();
@@ -218,7 +208,6 @@ public class Game : IGame
         {
             Hold hold;
 
-            // Never have two of the same holds in a row
             do
             {
                 hold = HoldExtensions.GetRandomHold();
@@ -228,7 +217,7 @@ public class Game : IGame
         }
 
         string sequence = sequenceBuilder.ToString();
-        Debug.Log(sequence);
+
         return sequence;
     }
 }
