@@ -12,9 +12,12 @@ public class Data
         private string dbName = "SequenzboardDB";
         private string collectionName = "Sequenzen";
 
+        /// <summary>
+        /// Retrieves all sequences from the database.
+        /// </summary>
+        /// <returns>A list of SequenceModel objects representing all sequences.</returns>
         public List<SequenceModel> GetAllSequences()
         {
-            //Establish db connection
             var client = new MongoClient(connectionUrl);
             var db = client.GetDatabase(dbName);
             var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
@@ -31,9 +34,12 @@ public class Data
             return allSequences;
         }
 
+        /// <summary>
+        /// Retrieves all sequence names from the database.
+        /// </summary>
+        /// <returns>A List of strings with the names of the sequences.</returns>
         public List<string> GetSequenceNames()
         {
-            //Establish db connection
             var client = new MongoClient(connectionUrl);
             var db = client.GetDatabase(dbName);
             var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
@@ -49,10 +55,14 @@ public class Data
 
             return allSequences;
         }
-
+    
+        /// <summary>
+        /// Retrieves a sequence from the database by its name.
+        /// </summary>
+        /// <param name="name">The name of the sequence to retrieve.</param>
+        /// <returns>A string representing the sequence.</returns>
         public string LoadSequence(string name)
         {
-            //Establish db connection
             var client = new MongoClient(connectionUrl);
             var db = client.GetDatabase(dbName);
             var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
@@ -64,11 +74,15 @@ public class Data
             return result.sequence;
         }
 
+        /// <summary>
+        /// Saves a sequence to the database.
+        /// </summary>
+        /// <param name="name">The name of the sequence to save.</param>
+        /// <param name="sequence">The sequence to save.</param>
         public void SaveSequence(string name, string sequence)
         {
             Debug.Log("SaveSequence: " + name + " " + sequence);
             try {
-                //Establish db connection
                 var client = new MongoClient(connectionUrl);
                 var db = client.GetDatabase(dbName);
                 var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
@@ -86,9 +100,12 @@ public class Data
             }
         }
 
+        /// <summary>
+        /// Deletes a sequence from the database by its name.
+        /// </summary>
+        /// <param name="name">The name of the sequence to delete.</param>
         public void DeleteSequence(string name)
         {
-            //Establish db connection
             var client = new MongoClient(connectionUrl);
             var db = client.GetDatabase(dbName);
             var sequenceCollection = db.GetCollection<SequenceModel>(collectionName);
