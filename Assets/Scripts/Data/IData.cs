@@ -1,24 +1,23 @@
 public interface IData 
 {
-    
     /// <summary>
     /// Retrieves all sequences from the database.
     /// </summary>
     /// <returns>A list of SequenceModel objects representing all sequences.</returns>
-    void List<SequenceModel> GetAllSequences();
+    List<SequenceModel> GetAllSequences();
 
     /// <summary>
     /// Retrieves all sequence names from the database.
     /// </summary>
     /// <returns>A List of strings with the names of the sequences.</returns>    
-    void List<string> GetSequenceNames();
+    List<string> GetSequenceNames();
     
     /// <summary>
     /// Retrieves a sequence from the database by its name.
     /// </summary>
     /// <param name="name">The name of the sequence to retrieve.</param>
     /// <returns>A string representing the sequence.</returns>
-    void string LoadSequence(string name);
+    string LoadSequence(string name);
 
     /// <summary>
     /// Saves a sequence to the database.
