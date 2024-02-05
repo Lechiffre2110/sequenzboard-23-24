@@ -5,11 +5,11 @@ using UnityEngine;
 public class Audio : MonoBehaviour
 {
     public AudioClip[] clips;
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
+    /// <summary>
+    /// Play a sound from the clips array
+    /// </summary>
+    /// <param name="index">index of the clip</param>
     public void PlaySound(int index)
     {
         Debug.Log("Playing sound " + index);
@@ -19,11 +19,5 @@ public class Audio : MonoBehaviour
         }
         GetComponent<AudioSource>().clip = clips[index];
         GetComponent<AudioSource>().Play();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
