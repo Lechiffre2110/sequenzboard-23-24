@@ -8,6 +8,9 @@ public class BluetoothConnector
     private string _arduinoPort;
     private bool _connectionStatus = false;
     
+    /// <summary>
+    /// Constructor for the BluetoothConnector class.
+    /// </summary>
     public BluetoothConnector()
     {
         _serialPort = null;
@@ -15,12 +18,20 @@ public class BluetoothConnector
         _connectionStatus = StartBluetoothConnection();
     }
 
+    /// <summary>
+    /// Gets the connection status.
+    /// </summary>
+    /// <returns>True if the board is connected, false otherwise.</returns>
     public bool GetConnectionStatus()
     {
         Debug.Log("Is connected: " + _connectionStatus);
         return _connectionStatus;
     }
 
+    /// <summary>
+    /// Gets the Arduino port.
+    /// </summary>
+    /// <returns>The Arduino port.</returns>
     public string GetArduinoPort()
     {
         string arduinoPort = null;
@@ -41,6 +52,10 @@ public class BluetoothConnector
         return arduinoPort;
     }
 
+    /// <summary>
+    /// Establishes the Bluetooth connection to the board.
+    /// </summary>
+    /// <returns>True if the connection was successful, false otherwise.</returns>
     public bool StartBluetoothConnection()
     {
         _serialPort = new SerialPort(_arduinoPort, 9600);
@@ -58,6 +73,10 @@ public class BluetoothConnector
         }
     }
 
+    /// <summary>
+    /// Reads data from the board via the serial port.
+    /// </summary>
+    /// <returns>The data read from the board.</returns>
     public string ReadData()
     {
         if (_serialPort == null || !_serialPort.IsOpen) 
@@ -67,6 +86,10 @@ public class BluetoothConnector
         return _serialPort.ReadLine();
     }
 
+    /// <summary>
+    /// Writes data to the board via the serial port.
+    /// </summary>
+    /// <param name="data">The data to write to the board.</param>
     public void WriteData(string data)
     {
         if (_serialPort == null)
@@ -82,6 +105,9 @@ public class BluetoothConnector
         Debug.Log("Sent data to board: " + data);
     }
 
+    /// <summary>
+    /// Stops the Bluetooth connection to the board.
+    /// </summary>
     public void StopBluetoothConnection()
     {
         if (_serialPort != null && _serialPort.IsOpen)
@@ -91,6 +117,10 @@ public class BluetoothConnector
         }
     }
 
+    /// <summary>
+    /// Gets the serial port.
+    /// </summary>
+    /// <returns>The serial port.</returns>
     public SerialPort GetSerialPort()
     {
         return _serialPort;
