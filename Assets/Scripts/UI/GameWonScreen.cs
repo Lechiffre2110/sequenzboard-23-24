@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GameWonScreen : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
+{   
+    /// <summary>
+    /// Custom SetActive method to set the game object active or inactive
+    /// </summary>
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);

@@ -20,6 +20,10 @@ public class RunningGameScreen : MonoBehaviour
         gameObject.SetActive(active);
     }
 
+    /// <summary>
+    /// Show a hold on screen
+    /// </summary>
+    /// <param name="holdName">The name of the hold to show</param>
     public void ShowHold(string holdName)
     {
         int index = ConvertHoldToIndex(holdName);
@@ -27,6 +31,11 @@ public class RunningGameScreen : MonoBehaviour
         StartCoroutine(ShowHold(holdObject, index));
     }
 
+    /// <summary>
+    /// Show a hold for 1 second
+    /// </summary>
+    /// <param name="hold">The hold to show</param>
+    /// <param name="index">The index of the hold</param>
     private IEnumerator ShowHold(GameObject hold, int index)
     {
         PlaySound(index);
@@ -37,21 +46,27 @@ public class RunningGameScreen : MonoBehaviour
         overlay.transform.SetSiblingIndex(100);
     }
 
+    /// <summary>
+    /// Indicate that the correct hold was pressed
+    /// </summary>
     public void IndicateCorrectHold()
     {
         correctFeedbackFrame.SetActive(true);
         StartCoroutine(HideCorrectFeedbackAfterDelay());
     }
 
+    /// <summary>
+    /// Hide the correct hold frame after a delay of 1 second
+    /// </summary>
     private IEnumerator HideCorrectFeedbackAfterDelay()
     {
-        // Wait for 0.5 seconds
-        yield return new WaitForSeconds(1f);
-
-        // Hide correct hold frame after the delay
+         yield return new WaitForSeconds(1f);
         correctFeedbackFrame.SetActive(false);
     }
 
+    /// <summary>
+    /// Indicate that the pressed hold was incorrect
+    /// </summary>
     public void IndicateIncorrectHold()
     {
         //show incorrect hold frame for 0.5 seconds
@@ -59,25 +74,37 @@ public class RunningGameScreen : MonoBehaviour
         StartCoroutine(HideIncorrectFeedbackAfterDelay());
     }
 
+    /// <summary>
+    /// Hide the incorrect hold frame after a delay of 1 second
+    /// </summary>
     private IEnumerator HideIncorrectFeedbackAfterDelay()
     {
-        // Wait for 0.5 seconds
         yield return new WaitForSeconds(1f);
-
-        // Hide incorrect hold frame after the delay
         incorrectFeedbackFrame.SetActive(false);
     }
 
+    /// <summary>
+    /// Update the current hold
+    /// </summary>
+    /// <param name="currentHold">The index of the current hold</param>
     public void UpdateCurrentHold(int currentHold) 
     {
         this.currentHold = currentHold;
     }
 
+    /// <summary>
+    /// Reset the game state
+    /// </summary>
     public void ResetGameState() 
     {
         currentHold = 0;
     }
 
+    /// <summary>
+    /// Update the game state based on the user input on the board
+    /// </summary>
+    /// <param name="progress">The current progress</param>
+    /// <param name="isCorrect">True if the input was correct, false otherwise</param>
     public void UpdateGameState(int progress, bool isCorrect) 
     {
         sequenceLength = PlayerPrefs.GetInt("currentLength");
@@ -93,11 +120,20 @@ public class RunningGameScreen : MonoBehaviour
         currentHoldText.text = "Griff " + currentHold + "/" + sequenceLength;
     }
 
+    /// <summary>
+    /// Play a sound for a specific hold
+    /// </summary>
+    /// <param name="index">The index of the hold</param>
     public void PlaySound(int index)
     {
         audio.PlaySound(index);
     }
 
+    /// <summary>
+    /// Helper method to convert a hold name to an index
+    /// </summary>
+    /// <param name="holdName">The name of the hold</param>
+    /// <returns>The index of the hold</returns>
     private int ConvertHoldToIndex(string holdName)
     {
         char[] holdChar = holdName.ToCharArray();

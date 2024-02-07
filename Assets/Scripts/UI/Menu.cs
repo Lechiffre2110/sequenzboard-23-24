@@ -10,25 +10,17 @@ public class Menu : MonoBehaviour
     public delegate void OnRestartGameEventHandler();
     public static event OnRestartGameEventHandler OnRestartGame;
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Resume the game by closing the menu
+    /// </summary>
     public void CloseMenu()
     {
         gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Pauses the game by opening the menu
+    /// </summary>
     public void OpenMenu()
     {
         gameObject.SetActive(true);

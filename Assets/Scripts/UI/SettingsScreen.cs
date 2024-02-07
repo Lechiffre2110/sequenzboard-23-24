@@ -12,7 +12,9 @@ public class SettingsScreen : MonoBehaviour
     private int _volume = 5;
     private int _length = 5;
 
-
+    /// <summary>
+    /// Increase the volume by 1
+    /// </summary>
     public void IncreaseVolume()
     {
         if (_volume == 10)
@@ -26,6 +28,9 @@ public class SettingsScreen : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Decrease the volume by 1
+    /// </summary>
     public void DecreaseVolume()
     {
         if (_volume == 0)
@@ -38,6 +43,9 @@ public class SettingsScreen : MonoBehaviour
         PlayerPrefs.SetInt("volume", _volume);
     }
 
+    /// <summary>
+    /// Increase the default generation sequence length by 1
+    /// </summary>
     public void IncreaseLength()
     {
         _length++;
@@ -45,6 +53,9 @@ public class SettingsScreen : MonoBehaviour
         PlayerPrefs.SetInt("length", _length);
     }
 
+    /// <summary>
+    /// Decrease the default generation sequence length by 1
+    /// </summary>
     public void DecreaseLength()
     {
         if (_length == 0)
@@ -57,7 +68,7 @@ public class SettingsScreen : MonoBehaviour
     }
 
 
-    // Start is called before the first frame update
+    // Set the volume and length to the saved values
     void Start()
     {
         _volume = PlayerPrefs.GetInt("volume");

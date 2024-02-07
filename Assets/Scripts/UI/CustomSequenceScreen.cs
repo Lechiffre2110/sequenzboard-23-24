@@ -17,13 +17,17 @@ public class CustomSequenceScreen : MonoBehaviour
     public delegate void OnSequenceSaveEvent(string name, string sequence);
     public static event OnSequenceSaveEvent OnSequenceSave;
 
-
+    // Custom SetActive method to reset sequenceString
     public void SetActive(bool active)
     {
         gameObject.SetActive(active);
         sequenceString = "";
     }
 
+    /// <summary>
+    /// Add a hold to the sequence
+    /// </summary>
+    /// <param name="hold">The hold to add as a string (e.g. "A")</param>
     private void AddHoldToSequence(string hold)
     {
         char[] holdAsChar = hold.ToCharArray();
@@ -31,11 +35,18 @@ public class CustomSequenceScreen : MonoBehaviour
         Debug.Log("Sequence: " + GetSequence());
     }
 
+    /// <summary>
+    /// Getter for sequenceString
+    /// </summary>
     public string GetSequence()
     {
         return sequenceString;
     }
 
+    /// <summary>
+    /// Handle game input from the board
+    /// </summary>
+    /// <param name="hold">The hold that was pressed</param>
     public void HandleSequenceInput(string hold)
     {
         int index = ConvertHoldToIndex(hold);
@@ -44,6 +55,11 @@ public class CustomSequenceScreen : MonoBehaviour
         AddHoldToSequence(hold);
     }
     
+    /// <summary>
+    /// Show a hold for a short time
+    /// </summary>
+    /// <param name="hold">The hold to show</param>
+    /// <param name="index">The index of the hold in the hold List</param>
     private IEnumerator ShowHold(GameObject hold, int index)
     {
         PlaySound(index);
@@ -53,22 +69,37 @@ public class CustomSequenceScreen : MonoBehaviour
         hold.transform.SetSiblingIndex(previousIndex);
     }
 
+    /// <summary>
+    /// Handle the completion of a sequence
+    /// </summary>
     public void HandleSequenceComplete()
     {
         OnCustomSequenceComplete?.Invoke(sequenceString);
     }
 
+    /// <summary>
+    /// Save the current sequence to the database
+    /// </summary>
     public void SaveSequenceToDatabase()
     {
         string name = sequenceName.text;
         OnSequenceSave?.Invoke(name, sequenceString);
     }
 
+    /// <summary>
+    /// Play hold specific sound
+    /// </summary>
+    /// <param name="index">The index of the hold</param>
     public void PlaySound(int index)
     {
         audio.PlaySound(index);
     }
 
+    /// <summary>
+    /// Helper method to convert a hold name to an index
+    /// </summary>
+    /// <param name="holdName">The name of the hold</param>
+    /// <returns>The index of the hold</returns>
     private int ConvertHoldToIndex(string holdName)
     {
         char[] holdNameArray = holdName.ToCharArray();

@@ -14,15 +14,24 @@ public class SequenceGameScreen : MonoBehaviour
         gameObject.SetActive(active);
     }
 
+    /// <summary>
+    /// Show the passed in hold on the screen
+    /// </summary>
+    /// <param name="holdName">The name of the hold to show</param>
+    /// <param name="index">The index of the hold</param>
     private IEnumerator ShowHold(GameObject hold, int index = 6)
     {
         int previousIndex = hold.transform.GetSiblingIndex();
         hold.transform.SetSiblingIndex(10000);
         PlaySound(index);
-        yield return new WaitForSeconds(1.5f); //TODO: could be a setting for difficulty
+        yield return new WaitForSeconds(1.5f); 
         hold.transform.SetSiblingIndex(previousIndex);
     }
 
+    /// <summary>
+    /// Play a sequence of holds based on the passed in string
+    /// </summary>
+    /// <param name="sequence">The sequence to play</param>
     public IEnumerator PlaySequence(string sequence)
     {
         string filteredSequence = "";
@@ -65,11 +74,18 @@ public class SequenceGameScreen : MonoBehaviour
         _currentSequence = filteredSequence;
     }
 
+    /// <summary>
+    /// Replay the current sequence
+    /// </summary>
     public void ReplaySequence()
     {
         StartCoroutine(PlaySequence(_currentSequence));
     }
     
+    /// <summary>
+    /// Play hold specific sound
+    /// </summary>
+    /// <param name="index">The index of the hold</param>
     private void PlaySound(int index)
     {
         audio.PlaySound(index);

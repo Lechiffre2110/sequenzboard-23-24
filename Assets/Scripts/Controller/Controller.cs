@@ -51,8 +51,8 @@ public class Controller : MonoBehaviour
         Game.OnGameWon -= _userInterface.HandleGameWon;
         LoadSequenceDropdown.OnLoadSequence -= StartGameWithCustomSequence;
         TrainingScreen.OnStartTraining -= StartTrainingGame;
-        Game.OnTrainingGameStarted -= SendSequenceToBoard; //look into this
-        Game.OnTrainingGameUpdated -= _userInterface.UpdateTrainingGameState; //look into this
+        Game.OnTrainingGameStarted -= SendSequenceToBoard; 
+        Game.OnTrainingGameUpdated -= _userInterface.UpdateTrainingGameState;
     }
 
     void SendSequenceToBoard(string name, string sequence)
